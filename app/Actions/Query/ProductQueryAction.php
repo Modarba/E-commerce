@@ -3,10 +3,8 @@ namespace App\Actions\Query;
 use App\Actions\BaseAction;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Validator;
-
 class ProductQueryAction extends BaseAction
 {
     public function execute(array $data)

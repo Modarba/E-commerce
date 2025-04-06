@@ -7,6 +7,7 @@ use App\Actions\Query\PriceRangeSpecificationAction;
 use App\Actions\Query\SearchSpecificationAction;
 use App\Actions\Query\SortStrategy;
 use App\Actions\Query\StockSpecificationAction;
+use App\Http\Controllers\Query\QueryController;
 use App\Models\Product;
 
 class ProductFilterService

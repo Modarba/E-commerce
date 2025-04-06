@@ -5,7 +5,6 @@ namespace App\Actions\Query;
 class SortStrategy
 {
     private array $sortMappings;
-
     public function __construct(array $sortMappings)
     {
         $this->sortMappings = $sortMappings;
