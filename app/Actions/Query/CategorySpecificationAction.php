@@ -11,5 +11,6 @@ class CategorySpecificationAction extends  FilterSpecification
         return $query->whereHas('categories', fn($q) =>
         $q->where('name', 'like', "%{$value}%")
         );
+
     }
 }

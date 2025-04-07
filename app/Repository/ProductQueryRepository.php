@@ -2,22 +2,11 @@
 
 namespace App\Repository;
 
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Str;
-
 class ProductQueryRepository
 {
-//    public function getFilteredProducts(array $data)
-//    {
-//        $query = Product::query();
-//        $this->applyStockFilter($query, $data);
-//        $this->applySearchFilter($query, $data);
-//        $this->applyCategoryFilter($query, $data);
-//        $this->applyMinPriceFilter($query, $data);
-//        $this->applyMaxPriceFilter($query, $data);
-//        $this->applySort($query, $data);
-//        return $query;
-//    }
     public function getFilteredProducts(array $data)
     {
         $query = Product::query();
@@ -27,6 +16,7 @@ class ProductQueryRepository
                 $this->$method($query, $value);
             }
         }
+
         return $query->paginate(20);
     }
     public function applySearchFilter($query, $search)

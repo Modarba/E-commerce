@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\UserController;
@@ -48,10 +47,24 @@ Route::prefix('user')
             Route::delete('{id}', [UserController::class, 'removeProductOrder'])->name('destroy');
             Route::put('{id}', [UserController::class, 'updateProductOrder'])->name('update');
         });
-        Route::prefix('query')
+        Route::prefix('queryProduct')
             ->name('query.')
             ->group(function () {
-                Route::get('/',[\App\Http\Controllers\Query\QueryController::class,'query'])->name('query');
+                Route::get('/',[\App\Http\Controllers\Query\QueryController::class,'queryProduct'])->name('query');
+            });
+        Route::prefix('queryOrder')
+            ->name('query.')
+            ->group(function () {
+                Route::get('/',[\App\Http\Controllers\Query\QueryController::class,'queryOrder'])->name('query');
+            });
+        Route::prefix('userQuery')
+            ->name('user.')
+            ->group(function () {
+                Route::get('/',[\App\Http\Controllers\Query\QueryController::class,'queryUser'])->name('query');
+            });
+        Route::prefix('orderProductQuery')->name('orderProductQuery.')
+            ->group(function () {
+                Route::get('/',[\App\Http\Controllers\Query\QueryController::class,'queryOrderProduct'])->name('query');
             });
         Route::prefix('payments')
             ->name('payments.')

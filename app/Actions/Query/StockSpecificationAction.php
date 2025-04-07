@@ -10,5 +10,4 @@ class StockSpecificationAction extends FilterSpecification
     {
         return $query->where('quantity', '>', 0);
     }
-
 }
