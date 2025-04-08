@@ -55,7 +55,6 @@ class OrderQueryRepository
             $query->whereDate('created_at', '<=', $toDate);
         }
     }
-
     public function applySearchFilter($query, $search)
     {
         if ($search) {

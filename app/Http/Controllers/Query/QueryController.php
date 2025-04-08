@@ -22,7 +22,6 @@ class QueryController extends Controller
     , OrderQueryRepository $orderRepository
     ,UserQueryRepository $userRepository
     , ProductQueryRepository $productOrderRepository
-    , ProductFilterService $productFilterService
     )
     {
         $this->productRepository=$productRepository;

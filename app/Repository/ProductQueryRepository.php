@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Repository;
-
+use App\Enum\StatusCode;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 class ProductQueryRepository
 {
@@ -11,13 +11,17 @@ class ProductQueryRepository
     {
         $query = Product::query();
         foreach ($data as $key => $value) {
-            $method = 'apply' . Str::studly($key) . 'Filter';
-            if (method_exists($this, $method)) {
-                $this->$method($query, $value);
-            }
+            $this->applyFilter($query, $key, $value);
         }
-
         return $query->paginate(20);
+    }
+    protected function applyFilter($query, $key, $value)
+    {
+        $method = 'apply' . Str::studly($key) . 'Filter';
+        if (method_exists($this, $method))
+        {
+            $this->$method($query, $value);
+        }
     }
     public function applySearchFilter($query, $search)
     {
