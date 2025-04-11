@@ -4,9 +4,11 @@ namespace App\Actions\Auth;
 
 use App\Actions\BaseAction;
 use App\Http\Resources\UserResource;
+use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,13 +24,28 @@ class RegisterAction extends BaseAction
     }
     protected function execute(array $data)
     {
-        $user = User::create([
+        $user = User::updateOrCreate([
             'name' => $data['name'],
             'email' => $data['email'],
+        ], [
             'password' => Hash::make($data['password']),
         ]);
+        $user->refresh();
+        $tenantId = strtolower($user->name) . '_' . uniqid();
+        $tenant = Tenant::create([
+            'id' => $tenantId,
+            'data' => [
+                'name' => $user->name . ' Store',
+            ],
+        ]);
+        $tenant = Tenant::find($tenantId);
+        $tenant->domains()->create([
+            'domain' => $tenantId . '.' . config('tenancy.central_domains.0'),
+        ]);
+        Artisan::call('tenants:migrate', ['--force' => true]);
         $user->assignRole('User');
-       return $user;
+        return $user;
+
     }
     protected function resource($result): JsonResource
     {
