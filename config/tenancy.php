@@ -48,7 +48,7 @@ return [
         'template_tenant_connection' => null,
 
         /**
-         * Tenant database names are created like this:
+         * tenant database names are created like this:
          * prefix + tenant_id + suffix.
          */
         'prefix' => 'tenant',

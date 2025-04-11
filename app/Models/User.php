@@ -21,10 +21,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
-    public function Tenant()
-    {
-        return $this->hasOne(Tenant::class);
-    }
     protected $fillable = [
         'name',
         'email',

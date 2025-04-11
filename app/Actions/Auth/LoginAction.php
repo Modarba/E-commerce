@@ -4,9 +4,11 @@ namespace App\Actions\Auth;
 
 use App\Actions\BaseAction;
 use App\Http\Resources\UserResource;
+use App\Models\Tenant;
 use Faker\Provider\Base;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class LoginAction extends  BaseAction
@@ -23,16 +25,15 @@ class LoginAction extends  BaseAction
         if (!Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
             return null;
         }
-
         $user = Auth::user();
-        $role = $user->hasRole('admin') ? 'admin' : 'user';
-        $token = $user->createToken($role . '_auth_token')->plainTextToken;
-        return [
-            'user' => $user,
-            'token' => $token,
-            'role' => $role,
-        ];
-    }
+            $role = $user->hasRole('admin') ? 'admin' : 'user';
+            $token = $user->createToken($role . '_auth_token')->plainTextToken;
+            return [
+                'user' => $user,
+                'token' => $token,
+                'role' => $role,
+            ];
+        }
     protected function resource($result): JsonResource
     {
         return new JsonResource([

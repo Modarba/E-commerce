@@ -9,12 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 class Product extends Model
 {
     use HasFactory;
-    protected static function booted()
-    {
-        static::addGlobalScope('tenant', function (Builder $builder) {
-            $builder->where('tenant_id', app('tenantManager')->getTenantId());
-        });
-    }
     protected $fillable = ['name', 'description', 'price', 'quantity', 'image'];
 
     public function orders()

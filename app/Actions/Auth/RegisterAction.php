@@ -9,8 +9,10 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterAction extends BaseAction
 {
@@ -30,19 +32,6 @@ class RegisterAction extends BaseAction
         ], [
             'password' => Hash::make($data['password']),
         ]);
-        $user->refresh();
-        $tenantId = strtolower($user->name) . '_' . uniqid();
-        $tenant = Tenant::create([
-            'id' => $tenantId,
-            'data' => [
-                'name' => $user->name . ' Store',
-            ],
-        ]);
-        $tenant = Tenant::find($tenantId);
-        $tenant->domains()->create([
-            'domain' => $tenantId . '.' . config('tenancy.central_domains.0'),
-        ]);
-        Artisan::call('tenants:migrate', ['--force' => true]);
         $user->assignRole('User');
         return $user;
 

@@ -8,7 +8,7 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 /*
 |--------------------------------------------------------------------------
-| Tenant Routes
+| tenant Routes
 |--------------------------------------------------------------------------
 |
 | Here you can register the tenant routes for your application.
