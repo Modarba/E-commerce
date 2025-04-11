@@ -16,12 +16,26 @@ abstract class BaseFilter
         }
         return $query->paginate(20);
     }
+    abstract protected function getRelationshipMap(): array;
     protected function applyFilter($query, $key, $value)
     {
         $method = 'apply' . Str::studly($key) . 'Filter';
         if (method_exists($this, $method)) {
             $this->$method($query, $value);
+        } else {
+            $relationshipMap = $this->getRelationshipMap();
+            if (isset($relationshipMap[$key]) && $value) {
+                $relation = $relationshipMap[$key]['relation'];
+                $column   = $relationshipMap[$key]['column'];
+                $this->applyRelationshipFilter($query, $relation, $column, $value);
+            }
         }
+    }
+    protected function applyRelationshipFilter($query, $relation, $column, $value)
+    {
+        $query->whereHas($relation, function ($q) use ($column, $value) {
+            $q->where($column, $value);
+        });
     }
     public function applySearchFilter($query, $search)
     {
@@ -29,19 +43,10 @@ abstract class BaseFilter
             $searchable = array_filter($this->getFilterableFields(), function ($field) {
                 return in_array($field->value, ['name', 'description']);
             });
-
             $query->where(function ($q) use ($search, $searchable) {
                 foreach ($searchable as $field) {
                     $q->orWhere($field->value, 'like', "%{$search}%");
                 }
-            });
-        }
-    }
-    public function applyCategoryFilter($query, $category)
-    {
-        if ($category) {
-            $query->whereHas('categories', function ($q) use ($category) {
-                $q->where('name', 'like', "%{$category}%");
             });
         }
     }

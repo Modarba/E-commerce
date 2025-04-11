@@ -1,74 +1,27 @@
 <?php
 namespace App\Repository;
+use App\Actions\BaseFilter;
+use App\Enum\ProductEnum;
 use App\Enum\StatusCode;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-class ProductQueryRepository
+class ProductQueryRepository extends BaseFilter
 {
-    public function getFilteredProducts(array $data)
+    protected function getQuery()
     {
-        $query = Product::query();
-        foreach ($data as $key => $value) {
-            $this->applyFilter($query, $key, $value);
-        }
-        return $query->paginate(20);
+        return Product::query();
     }
-    protected function applyFilter($query, $key, $value)
+    protected function getFilterableFields(): array
     {
-        $method = 'apply' . Str::studly($key) . 'Filter';
-        if (method_exists($this, $method))
-        {
-            $this->$method($query, $value);
-        }
+        return ProductEnum::cases();
     }
-    public function applySearchFilter($query, $search)
+    protected function getRelationshipMap(): array
     {
-        if ($search) {
-            $query->where(function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
+        return [
+            'category'=>['relation' => ProductEnum::CATEGORY->value, 'column' =>ProductEnum::NAME->value],
+        ];
     }
-    public function applyCategoryFilter($query, $category)
-    {
-        if ($category) {
-            $query->whereHas('categories', function ($q) use ($category) {
-                $q->where('name', 'like', "%{$category}%");
-            });
-        }
-    }
-    public function applyMinPriceFilter($query, $minPrice)
-    {
-        if ($minPrice) {
-            $query->whereRaw('CAST(price AS DECIMAL) >= ?', [$minPrice]);
-        }
-    }
-    public function applyMaxPriceFilter($query, $maxPrice)
-    {
-        if ($maxPrice) {
-            $query->whereRaw('CAST(price AS DECIMAL) <= ?', [$maxPrice]);
-        }
-    }
-    public function applySortFilter($query, $sort)
-    {
-        if ($sort) {
-            $order = ($sort === 'price_asc' || $sort === 'newest') ? 'asc' : 'desc';
-            $column = match($sort) {
-                'price_asc', 'price_desc' => 'price',
-                'newest' => 'created_at',
-                default => 'created_at'
-            };
-
-            $query->orderBy($column, $order);
-        }
-    }
-    public function applyInStockFilter($query, $inStock)
-    {
-        if ($inStock) {
-            $query->where('quantity', '>', 0);
-        }
-    }
+    
 }

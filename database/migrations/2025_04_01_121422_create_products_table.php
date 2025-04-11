@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('price');
             $table->integer('quantity')->default(0);
             $table->string('image');
-            $table->json('attributes')->nullable();
             $table->timestamps();
         });
     }

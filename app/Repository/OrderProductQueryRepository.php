@@ -1,50 +1,25 @@
 <?php
 namespace App\Repository;
+use App\Actions\BaseAction;
+use App\Actions\BaseFilter;
+use App\Enum\OrderProductEnum;
 use App\Models\OrderProduct;
 use Illuminate\Support\Str;
-class OrderProductQueryRepository
+class OrderProductQueryRepository extends  BaseFilter
 {
-    public function getOrderFilter(array $data)
+    protected function getQuery()
     {
-        $query= OrderProduct::query();
-        foreach ($data as $key => $value) {
-            $method='apply'.Str::studly($key).'Filter';
-            if (method_exists($this, $method)) {
-                $this->$method($query,$value);
-            }
-        }
+       return OrderProduct::query();
     }
-    public function applyPriceMaxFilter($query,$price)
+    protected function getFilterableFields(): array
     {
-        if ($price)
-        {
-            $query->where('price','>=',$price);
-        }
+        return  OrderProductEnum::cases();
     }
-    public function applyPriceMinFilter($query,$price)
+    protected function getRelationshipMap(): array
     {
-        if ($price)
-        {
-            $query->where('price','<=',$price);
-        }
-    }
-    public function applyQuantityFilter($query,$quantity)
-    {
-        if ($quantity) {
-            $query->where('quantity', '>=', 0);
-        }
-    }
-    public function applySortFilter($query, $sort)
-    {
-        if ($sort) {
-            $order = ($sort === 'price_asc' || $sort === 'newest') ? 'asc' : 'desc';
-            $column = match($sort) {
-                'price_asc', 'price_desc' => 'price',
-                'newest' => 'created_at',
-                default => 'created_at'
-            };
-
-            $query->orderBy($column, $order);
-        }
+        return [
+            'order'=>['relation' => OrderProductEnum::ORDER->value, 'column' => OrderProductEnum::ID->value],
+            'product' => ['relation' => OrderProductEnum::PRODUCT->value,'column' => OrderProductEnum::ID->value],
+        ];
     }
 }

@@ -23,6 +23,7 @@ class ProductFactory extends Factory
                 'price' => $this->faker->numberBetween(100, 500),
                 'quantity' => $this->faker->numberBetween(1, 20),
                 'image' => 'products/default.png',
+            ''
         ];
     }
 }
