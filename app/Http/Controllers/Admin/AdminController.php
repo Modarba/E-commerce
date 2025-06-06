@@ -10,24 +10,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 class AdminController extends Controller
 {
-    protected  $addProduct;
-    protected  $deleteProduct;
-    protected  $showProduct;
-    protected  $updateProduct;
-    protected  $updateStatus;
     public function __construct(
-        AddProductAction $addFolder,
-        DeleteProductAction $deleteFolder,
-        ShowProductAction $showProduct,
-        UpdateProductAction $updateProduct,
-        UpdateStatusOrderAction $updateStatus,
-    )
-    {
-        $this->addProduct = $addFolder;
-        $this->deleteProduct = $deleteFolder;
-        $this->showProduct = $showProduct;
-        $this->updateProduct= $updateProduct;
-        $this->updateStatus= $updateStatus;
+        protected AddProductAction $addProduct,
+        protected DeleteProductAction $deleteProduct,
+        protected ShowProductAction $showProduct,
+        protected UpdateProductAction $updateProduct,
+        protected UpdateStatusOrderAction $updateStatus
+    ) {
     }
     public function addProduct(Request $request)
     {

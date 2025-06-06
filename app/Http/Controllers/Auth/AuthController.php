@@ -10,14 +10,11 @@ use Illuminate\Http\Client\Request;
 
 class AuthController extends Controller
 {
-    protected $registerAction;
-    protected $loginUserAction;
-    protected  $logoutAction;
-    public function __construct(RegisterAction $registerAction , LoginAction $loginUserAction ,LogoutAction $logoutAction)
-    {
-        $this->registerAction = $registerAction;
-        $this->loginUserAction= $loginUserAction;
-        $this->logoutAction = $logoutAction;
+    public function __construct(
+        protected RegisterAction $registerAction,
+        protected LoginAction $loginUserAction,
+        protected LogoutAction $logoutAction
+    ) {
     }
     public function register(\Illuminate\Http\Request $request)
     {

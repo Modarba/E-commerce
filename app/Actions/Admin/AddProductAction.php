@@ -10,7 +10,6 @@ use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
 class AddProductAction extends BaseAction
 {
     protected function validate(array $data)

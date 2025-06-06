@@ -15,31 +15,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
-    protected  $searchAction;
-    protected  $makeOrderAction;
-    protected  $paymentAction;
-    protected  $browseOrder;
-    protected  $deleteOrder;
-    protected  $updateOrder;
-    protected $removeProductOrderAction;
     public function __construct(
-        SearchAction $searchAction
-        ,MakeOrderAction $makeOrderAction
-        ,PaymentAction $paymentAction
-        ,BrowseOrderWithProductAction $browseOrder
-        , DeleteOrderAction $deleteOrder
-        ,UpdateOrderAction $updateOrder
-        ,RemoveProductOrderAction $removeProductAction
-    )
-    {
-        $this->searchAction = $searchAction;
-        $this->makeOrderAction = $makeOrderAction;
-        $this->paymentAction= $paymentAction;
-        $this->browseOrder = $browseOrder;
-        $this->deleteOrder= $deleteOrder;
-        $this->updateOrder= $updateOrder;
-        $this->removeProductOrderAction= $removeProductAction;
+        protected SearchAction $searchAction,
+        protected MakeOrderAction $makeOrderAction,
+        protected PaymentAction $paymentAction,
+        protected BrowseOrderWithProductAction $browseOrder,
+        protected DeleteOrderAction $deleteOrder,
+        protected UpdateOrderAction $updateOrder,
+        protected RemoveProductOrderAction $removeProductOrderAction
+    ) {
     }
+
     public function searchProduct(Request $request)
     {
         return $this->searchAction->handle($request->all());
