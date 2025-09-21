@@ -65,24 +65,30 @@ The system follows modern **clean architecture** principles: Thin Controllers, F
 - Storage for product images (public disk)
 
 ---
+## Project Structure
 app/
-├── Exceptions/ # Custom business exceptions
-│ ├── BaseBusinessException.php
-│ ├── QuantityExceededException.php
-│ ├── OrderAlreadyPaidException.php
-│ ├── InvalidPaymentAmountException.php
-│ └── AuthenticationFailedException.php
+├── Exceptions/              # Custom business exceptions
+│   ├── BaseBusinessException.php
+│   ├── QuantityExceededException.php
+│   ├── OrderAlreadyPaidException.php
+│   ├── InvalidPaymentAmountException.php
+│   └── AuthenticationFailedException.php
+│
 ├── Http/
-│ ├── Controllers/ # Thin controllers
-│ │ ├── Admin/
-│ │ ├── Auth/
-│ │ └── User/
-│ ├── Requests/ # Validation requests
-│ ├── Resources/ # API resources
-│ ├── Traits/ # Reusable traits
-├── Models/ # Fat models with business logic
-├── Repository/ # Query repositories with BaseFilter
-└── Services/ # Services for complex operations
+│   ├── Controllers/         # Thin controllers
+│   │   ├── Admin/
+│   │   ├── Auth/
+│   │   └── User/
+│   │
+│   ├── Requests/            # Validation requests
+│   ├── Resources/           # API resources
+│   └── Traits/              # Reusable traits
+│
+├── Models/                  # Fat models with business logic
+│
+├── Repository/              # Query repositories with BaseFilter
+│
+└── Services/                # Services for complex operations
 
 ## Key Components
 - **Models (Fat Models):** contain business logic, relationships, stock/payment checks.  
