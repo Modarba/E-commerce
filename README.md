@@ -25,12 +25,7 @@ The system follows modern **clean architecture** principles: Thin Controllers, F
 - [Requirements](#requirements)
 - [Project Structure](#project-structure)
 - [Key Components](#key-components)
-- [API Endpoints](#api-endpoints)
 - [Error Handling](#error-handling)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
-
 ---
 
 ## Features
