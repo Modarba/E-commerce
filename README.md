@@ -63,9 +63,9 @@ The system follows modern **clean architecture** principles: Thin Controllers, F
 - Laravel Sanctum (API authentication)  
 - Spatie Laravel Permission (roles/permissions)  
 - Storage for product images (public disk)
+- ## Project Structure
 
----
-## Project Structure
+```text
 app/
 ├── Exceptions/              # Custom business exceptions
 │   ├── BaseBusinessException.php
