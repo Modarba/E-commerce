@@ -1,12 +1,13 @@
 <?php
 namespace App\Actions;
  use App\Enum\StatusCode;
- use App\Trait\ApiResponse;
+ use App\Http\Trait\ApiResponse;
  use Couchbase\AuthenticationException;
  use Exception;
  use Illuminate\Database\Eloquent\ModelNotFoundException;
  use Illuminate\Http\JsonResponse;
  use Illuminate\Validation\ValidationException;
+
  abstract class BaseAction
 {
      use ApiResponse;

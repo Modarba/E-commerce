@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Trait\ApiResponse;
 use App\Models\Tenant;
-use App\Trait\ApiResponse;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware

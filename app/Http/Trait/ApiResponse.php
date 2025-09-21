@@ -1,5 +1,5 @@
 <?php
-namespace App\Trait;
+namespace App\Http\Trait;
 trait ApiResponse
 {
     public  function successResponse($data,$statusCode)
