@@ -4,11 +4,11 @@ use App\Models\Product;
 use Illuminate\Http\UploadedFile;
 class ProductService
 {
-    protected $productModel;
 
-    public function __construct(Product $productModel)
+    public function __construct(
+         protected  Product $productModel
+    )
     {
-        $this->productModel = $productModel;
     }
 
     public function addProduct(array $data, ?UploadedFile $image = null)
@@ -17,4 +17,3 @@ class ProductService
         return $this->productModel::createProduct($data, $imagePath);
     }
 }
-?>

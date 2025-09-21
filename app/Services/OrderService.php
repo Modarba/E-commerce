@@ -8,14 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 class OrderService
 {
-    protected $orderModel;
-    protected $orderProductModel;
-    protected $productModel;
-    public function __construct(Order $orderModel, OrderProduct $orderProductModel, Product $productModel)
+    public function __construct(
+    protected    Order $orderModel,
+    protected  OrderProduct $orderProductModel,
+    protected  Product $productModel
+    )
     {
-        $this->orderModel = $orderModel;
-        $this->orderProductModel = $orderProductModel;
-        $this->productModel = $productModel;
     }
     public function makeOrder(int $productId, int $quantity)
     {

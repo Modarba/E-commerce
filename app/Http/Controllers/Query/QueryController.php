@@ -1,19 +1,11 @@
 <?php
 namespace App\Http\Controllers\Query;
-use App\Actions\Query\ProductQueryAction;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\User;
 use App\Repository\OrderProductQueryRepository;
 use App\Repository\OrderQueryRepository;
 use App\Repository\ProductQueryRepository;
 use App\Repository\UserQueryRepository;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 class QueryController extends Controller
 {
     public function __construct(

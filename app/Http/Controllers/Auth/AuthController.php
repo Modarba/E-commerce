@@ -1,32 +1,34 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
-
-use App\Actions\Auth\LoginAction;
-use App\Actions\Auth\LogoutAction;
-use App\Actions\Auth\RegisterAction;
+use App\Enum\StatusCode;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Client\Request;
-
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
 class AuthController extends Controller
 {
     public function __construct(
-        protected RegisterAction $registerAction,
-        protected LoginAction $loginUserAction,
-        protected LogoutAction $logoutAction
-    ) {
-    }
-    public function register(\Illuminate\Http\Request $request)
+        protected User $userModel
+    )
     {
-        return $this->registerAction->handle($request->all());
     }
-    public function login(\Illuminate\Http\Request $request)
+    public function register(RegisterRequest $request)
     {
-        return $this->loginUserAction->handle($request->all());
+        $user = $this->userModel::registerUser($request->validated());
+        return $this->successResponse(new UserResource($user),  StatusCode::CREATED->value);
     }
-    public  function logout()
+    public function login(LoginRequest $request)
     {
-        return $this->logoutAction->handle([]);
+        $data = $this->userModel::attemptLogin($request->validated());
+        return $this->successResponse([
+            'user' => new UserResource($data['user']),
+            'token' => $data['token'],
+            'role' => $data['role']
+        ],  StatusCode::SUCCESS->value);
     }
-
+    public function logout()
+    {
+        return $this->successResponse($this->userModel->logout(),  StatusCode::SUCCESS->value);
+    }
 }

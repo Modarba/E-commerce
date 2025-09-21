@@ -1,12 +1,9 @@
 <?php
 namespace App\Repository;
-use App\Actions\BaseFilter;
+use App\BaseFilter;
 use App\Enum\ProductEnum;
-use App\Enum\StatusCode;
-use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+
 class ProductQueryRepository extends BaseFilter
 {
     protected function getQuery()
@@ -23,5 +20,5 @@ class ProductQueryRepository extends BaseFilter
             'category'=>['relation' => ProductEnum::CATEGORY->value, 'column' =>ProductEnum::NAME->value],
         ];
     }
-    
+
 }

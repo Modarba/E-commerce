@@ -2,12 +2,9 @@
 
 namespace App\Repository;
 
-use App\Actions\BaseFilter;
-use App\Console\Commands\Query;
+use App\BaseFilter;
 use App\Enum\OrderEnum;
 use App\Models\Order;
-use Illuminate\Support\Str;
-use PHPUnit\TextUI\Output\SummaryPrinter;
 
 class OrderQueryRepository extends BaseFilter
 {

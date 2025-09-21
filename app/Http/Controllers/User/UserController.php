@@ -1,64 +1,70 @@
 <?php
 namespace App\Http\Controllers\User;
-use App\Actions\User\BrowseOrderWithProductAction;
-use App\Actions\User\DeleteOrderAction;
-use App\Actions\User\MakeOrderAction;
-use App\Actions\User\PaymentAction;
-use App\Actions\User\RemoveProductOrderAction;
-use App\Actions\User\SearchAction;
-use App\Actions\User\UpdateOrderAction;
+use App\Enum\StatusCode;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MakeOrderRequest;
+use App\Http\Requests\PaymentRequest;
+use App\Http\Requests\SearchProductRequest;
+use App\Http\Requests\UpdateProductOrderRequest;
+use App\Http\Resources\OrderResource;
+use App\Http\Resources\ProductOrderResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Services\OrderService;
 class UserController extends Controller
 {
     public function __construct(
-        protected SearchAction $searchAction,
-        protected MakeOrderAction $makeOrderAction,
-        protected PaymentAction $paymentAction,
-        protected BrowseOrderWithProductAction $browseOrder,
-        protected DeleteOrderAction $deleteOrder,
-        protected UpdateOrderAction $updateOrder,
-        protected RemoveProductOrderAction $removeProductOrderAction
-    ) {
+        protected Product $productModel,
+        protected OrderService $orderService,
+        protected Order $orderModel,
+        protected OrderProduct $orderProductModel
+    )
+    {
     }
 
-    public function searchProduct(Request $request)
+    public function searchProduct(SearchProductRequest $request)
     {
-        return $this->searchAction->handle($request->all());
+        $products = $this->productModel::searchByName($request->validated()['name']);
+        return $this->successResponse(ProductResource::collection($products),  StatusCode::SUCCESS->value);
     }
-    public function makeOrder(Request $request)
+
+    public function makeOrder(MakeOrderRequest $request)
     {
-        return $this->makeOrderAction->handle($request->all());
+        $orderProduct = $this->orderService->makeOrder($request->validated()['product_id'], $request->validated()['quantity']);
+        return $this->successResponse(new ProductOrderResource($orderProduct),  StatusCode::CREATED->value);
     }
-    public function payment(Request $request)
+
+    public function payment(PaymentRequest $request)
     {
-        return $this->paymentAction->handle($request->all());
+        $order = $this->orderModel->findOrFail($request->validated()['order_id']);
+        $order = $order->processPayment($request->validated()['amount'], $request->validated()['method']);
+        return $this->successResponse(new OrderResource($order),  StatusCode::SUCCESS->value);
     }
-    public function orderForUser()
+
+    public function ordersForUser()
     {
-        return $this->browseOrder->handle([]);
+        $orders = $this->orderService->browseOrders();
+        return $this->successResponse(OrderResource::collection($orders),  StatusCode::SUCCESS->value);
     }
+
     public function cancelOrder($id)
     {
-        return $this->deleteOrder->handle(['id'=>$id]);
+        $this->orderModel::deleteOrder($id);
+        return $this->successResponse(['message' => 'success'],  StatusCode::SUCCESS->value);
     }
-    public  function  updateProductOrder(Request $request, $id)
+
+    public function updateProductOrder(UpdateProductOrderRequest $request, $id)
     {
-        $data=[
-            'id'=>$id,
-            'quantity'=>$request->quantity,
-        ];
-        return $this->updateOrder->handle($data);
+        $orderProduct = $this->orderProductModel->findOrFail($id);
+        $orderProduct = $orderProduct->updateQuantity($request->validated()['quantity']);
+        return $this->successResponse(new ProductOrderResource($orderProduct),  StatusCode::SUCCESS->value);
     }
+
     public function removeProductOrder($id)
     {
-        $data=[
-            'id'=>$id,
-        ];
-        return $this->removeProductOrderAction->handle($data);
+        $this->orderService->removeProductFromOrder($id);
+        return $this->successResponse(['message' => 'success'],  StatusCode::SUCCESS->value);
     }
 }
